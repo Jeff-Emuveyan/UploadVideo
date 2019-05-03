@@ -78,7 +78,10 @@ public class UploadService extends Service {
                 public void onProgress(final int fileSize, final int bytesUploaded) {
 
                     //Service runs on UI thread so any long work should be done inside a separate thread.
-                    //Now, this onProgress() is more or less like a loop
+                    //Now, this onProgress() runs frequently and is more or less like a while loop.
+                    //If we don't wrap it inside a thread, it will freeze the Service. Your notification
+                    //buttons won't respond to clicks at all.
+                    //Ths is why we wrap these tasks inside a handler.
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
