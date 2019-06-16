@@ -5,8 +5,10 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -145,7 +147,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //create a IntentFilter to filter all possible Intent that may be sent from the Service to MainActivity
+        IntentFilter mIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);//important for new phones
+        mIntentFilter.addAction(Constants.PROGRESS_STATE);
 
+        //Now register the BroadCastReceiver
+        registerReceiver(mReceiver, mIntentFilter); //Don't forget to stop the receiver in onDestroy.
     }
 
 
@@ -266,15 +273,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            /*if (intent.getAction().equals(mBroadcastStringAction)) {
+            if (intent.getAction().equals(Constants.PROGRESS_STATE)) {
 
-            } else if (intent.getAction().equals(mBroadcastIntegerAction)) {
+                int fileSize = Integer.parseInt(intent.getStringExtra("fileSize"));
+                int bytesUploaded = Integer.parseInt(intent.getStringExtra("bytesUploaded"));
 
-            } else if (intent.getAction().equals(mBroadcastArrayListAction)) {
+                progressBar.setMax(fileSize);
+                progressBar.setProgress(bytesUploaded);
 
-                stopService(stopIntent);
-            }*/
+                titleTextView.setText(String.valueOf(fileSize)+"\n/"+String.valueOf(bytesUploaded));
+            }
         }
     };
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
 }

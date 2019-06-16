@@ -7,4 +7,5 @@ public class Constants {
     public final static String PAUSE = "com.example.jeffemuveyan.uploadvideo.PAUSE";
     public final static String RESUME = "com.example.jeffemuveyan.uploadvideo.RESUME";
     public final static String CANCEL = "com.example.jeffemuveyan.uploadvideo.CANCEL";
+    public final static String PROGRESS_STATE = "com.example.jeffemuveyan.uploadvideo.PROGRESS_STATE";
 }

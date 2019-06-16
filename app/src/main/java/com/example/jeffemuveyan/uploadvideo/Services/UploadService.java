@@ -102,6 +102,12 @@ public class UploadService extends Service {
                         }
                     });
 
+                    //Ok, lets us also send out a Broadcast
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(Constants.PROGRESS_STATE);
+                    broadcastIntent.putExtra("fileSize", String.valueOf(fileSize));
+                    broadcastIntent.putExtra("bytesUploaded", String.valueOf(bytesUploaded));
+                    sendBroadcast(broadcastIntent);
                 }
             });
 
